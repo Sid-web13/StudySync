@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudySync | AI Personalized Academic Mentorship</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+
+  <!-- ======================================================== -->
+  <!-- AUTHENTICATION VIEW (Visible when not logged in) -->
+  <!-- ======================================================== -->
+  <div id="authView" class="min-h-screen flex items-center justify-center p-4 sm:p-6 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900">
+    <div class="max-w-md w-full">
+      
+      <!-- Brand & Header -->
+      <div class="text-center mb-6">
+        <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-500 to-violet-500 shadow-xl shadow-indigo-500/25 mb-3 text-white">
+          <i data-lucide="graduation-cap" class="w-8 h-8"></i>
+        </div>
+        <h1 class="text-3xl font-extrabold text-white tracking-tight">StudySync</h1>
+        <p class="text-indigo-200 text-sm mt-1">Smart Personalized Academic Mentorship Platform</p>
+        <div class="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-400/30">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          SIH Problem Statement 26207 • Smart Education
+        </div>
+      </div>
+
+      <!-- Evaluator Quick Access Card -->
+      <div class="mb-5 bg-gradient-to-r from-amber-500/15 via-indigo-500/15 to-violet-500/15 border border-amber-400/40 rounded-2xl p-4 backdrop-blur-md shadow-lg">
+        <div class="flex items-start gap-3">
+          <div class="p-2 rounded-xl bg-amber-500/20 text-amber-300 shrink-0 mt-0.5">
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-sm font-bold text-amber-200 uppercase tracking-wider">Evaluator Quick Access</h3>
+            <p class="text-xs text-slate-300 mt-0.5 leading-relaxed">
+              Instantly populate pre-configured evaluator profile (<strong class="text-white">Siddharth</strong>, B.Tech CSE Sem 5, 9 topics, 1 weak topic @ 66.7%):
+            </p>
+            <button
+              onclick="fillDemoCredentials()"
+              type="button"
+              class="mt-2.5 w-full inline-flex items-center justify-center gap-2 px-3 py-2 text-xs font-bold rounded-xl bg-gradient-to-r from-amber-400 to-orange-400 text-slate-950 hover:from-amber-300 hover:to-orange-300 shadow-md transition-all active:scale-[0.98]"
+            >
+              <i data-lucide="key-round" class="w-4 h-4"></i>
+              One-Click Fill Demo Credentials
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Auth Box -->
+      <div class="bg-white/95 backdrop-blur-xl border border-white/20 rounded-2xl p-6 sm:p-8 shadow-2xl">
+        <!-- Tab Toggle -->
+        <div class="flex bg-slate-100 p-1 rounded-xl mb-6">
+          <button
+            id="tabLoginBtn"
+            onclick="switchAuthTab('login')"
+            class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-white text-indigo-600 shadow-sm"
+          >
+            Sign In
+          </button>
+          <button
+            id="tabSignupBtn"
+            onclick="switchAuthTab('signup')"
+            class="flex-1 py-2 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900"
+          >
+            New Student
+          </button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Student Email</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                <i data-lucide="mail" class="w-4 h-4"></i>
+              </span>
+              <input
+                id="loginEmail"
+                type="email"
+                required
+                placeholder="siddharth@studysync.edu"
+                class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+              >
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Password</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                <i data-lucide="lock" class="w-4 h-4"></i>
+              </span>
+              <input
+                id="loginPassword"
+                type="password"
+                required
+                placeholder="••••••••••••"
+                class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+              >
+            </div>
+          </div>
+          <button
+            id="loginSubmitBtn"
+            type="submit"
+            class="w-full py-3 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white text-sm font-bold shadow-lg shadow-indigo-600/30 transition-all flex items-center justify-center gap-2"
+          >
+            <span>Sign In to StudySync</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </form>
+
+        <!-- Signup Form -->
+        <form id="signupForm" onsubmit="handleSignup(event)" class="space-y-4 hidden">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Full Name</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                <i data-lucide="user" class="w-4 h-4"></i>
+              </span>
+              <input
+                id="signupName"
+                type="text"
+                required
+                placeholder="Aarav Sharma"
+                class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+              >
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Student Email</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                <i data-lucide="mail" class="w-4 h-4"></i>
+              </span>
+              <input
+                id="signupEmail"
+                type="email"
+                required
+                placeholder="aarav@college.edu"
+                class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+              >
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Password</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                <i data-lucide="lock" class="w-4 h-4"></i>
+              </span>
+              <input
+                id="signupPassword"
+                type="password"
+                required
+                minlength="6"
+                placeholder="••••••••••••"
+                class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+              >
+            </div>
+          </div>
+          <button
+            type="submit"
+            class="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white text-sm font-bold shadow-lg shadow-emerald-600/30 transition-all flex items-center justify-center gap-2"
+          >
+            <span>Create Account & Provision Starter Courses</span>
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ======================================================== -->
+  <!-- MAIN AUTHENTICATED APP SHELL -->
+  <!-- ======================================================== -->
+  <div id="appShell" class="min-h-screen flex flex-col hidden">
+
+    <!-- Top Navigation Bar -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          
+          <!-- Brand Logo -->
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/20">
+              <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <span class="text-lg font-extrabold tracking-tight bg-gradient-to-r from-slate-900 to-indigo-900 bg-clip-text text-transparent">StudySync</span>
+              <span class="hidden sm:inline-block ml-2 px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">SIH 26207</span>
+            </div>
+          </div>
+
+          <!-- Desktop Navigation Tabs -->
+          <nav class="hidden md:flex items-center space-x-1">
+            <button
+              id="nav-dashboard"
+              onclick="switchView('dashboard')"
+              class="nav-tab flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-all bg-indigo-50 text-indigo-600"
+            >
+              <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+              Dashboard
+            </button>
+            <button
+              id="nav-syllabus"
+              onclick="switchView('syllabus')"
+              class="nav-tab flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-all text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+            >
+              <i data-lucide="book-open" class="w-4 h-4"></i>
+              Syllabus
+            </button>
+            <button
+              id="nav-quiz"
+              onclick="switchView('quiz')"
+              class="nav-tab flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-all text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+            >
+              <i data-lucide="brain-circuit" class="w-4 h-4"></i>
+              Quiz Engine
+            </button>
+            <button
+              id="nav-mentor"
+              onclick="switchView('mentor')"
+              class="nav-tab flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-all text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+            >
+              <i data-lucide="bot" class="w-4 h-4"></i>
+              AI Mentor
+            </button>
+            <button
+              id="nav-analytics"
+              onclick="switchView('analytics')"
+              class="nav-tab flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-all text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+            >
+              <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+              Analytics
+            </button>
+          </nav>
+
+          <!-- User Badge & Logout -->
+          <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200">
+              <div class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs font-bold" id="userInitial">
+                S
+              </div>
+              <div class="text-left hidden sm:block">
+                <p id="userNameDisplay" class="text-xs font-bold text-slate-800 leading-tight">Siddharth</p>
+                <p class="text-[10px] text-slate-500 leading-tight">B.Tech CSE • Sem 5</p>
+              </div>
+            </div>
+            <button
+              onclick="handleLogout()"
+              title="Logout"
+              class="p-2 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all"
+            >
+              <i data-lucide="log-out" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Mobile Sub-Navigation -->
+      <div class="md:hidden border-t border-slate-100 px-4 py-2 flex items-center justify-between overflow-x-auto gap-1">
+        <button onclick="switchView('dashboard')" class="text-xs font-bold px-2 py-1 text-indigo-600">Dashboard</button>
+        <button onclick="switchView('syllabus')" class="text-xs font-bold px-2 py-1 text-slate-600">Syllabus</button>
+        <button onclick="switchView('quiz')" class="text-xs font-bold px-2 py-1 text-slate-600">Quiz</button>
+        <button onclick="switchView('mentor')" class="text-xs font-bold px-2 py-1 text-slate-600">AI Mentor</button>
+        <button onclick="switchView('analytics')" class="text-xs font-bold px-2 py-1 text-slate-600">Analytics</button>
+      </div>
+    </header>
+
+
+    <!-- Main Page Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+      <!-- ======================================================== -->
+      <!-- VIEW 1: DASHBOARD -->
+      <!-- ======================================================== -->
+      <section id="view-dashboard" class="space-y-6">
+        
+        <!-- Welcome Banner -->
+        <div class="bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 rounded-2xl p-6 sm:p-8 text-white relative overflow-hidden shadow-xl shadow-indigo-950/10">
+          <div class="relative z-10 max-w-2xl">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/30 text-indigo-200 border border-indigo-400/30 mb-3">
+              <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-300"></i>
+              Personalized Learning Dashboard
+            </span>
+            <h2 id="timeAwareGreeting" class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+              Good day, Siddharth! 👋
+            </h2>
+            <p class="text-indigo-200 text-sm mt-2 leading-relaxed">
+              Targeting Semester 5 mastery. StudySync has analyzed your curriculum metrics and identified your primary revision focal areas.
+            </p>
+          </div>
+          <div class="absolute right-0 bottom-0 translate-x-10 translate-y-10 opacity-10 pointer-events-none text-white">
+            <i data-lucide="brain-circuit" class="w-72 h-72"></i>
+          </div>
+        </div>
+
+        <!-- 4 KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between text-slate-500 mb-2">
+              <span class="text-xs font-bold uppercase tracking-wider">Syllabus Completion</span>
+              <div class="p-2 rounded-xl bg-indigo-50 text-indigo-600">
+                <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="flex items-baseline gap-2">
+              <span id="kpiSyllabusPct" class="text-2xl font-black text-slate-900">0%</span>
+              <span id="kpiTopicsCount" class="text-xs text-slate-500">0 / 0 topics</span>
+            </div>
+            <div class="w-full bg-slate-100 rounded-full h-1.5 mt-3 overflow-hidden">
+              <div id="kpiSyllabusBar" class="bg-indigo-600 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between text-slate-500 mb-2">
+              <span class="text-xs font-bold uppercase tracking-wider">Quizzes Taken</span>
+              <div class="p-2 rounded-xl bg-emerald-50 text-emerald-600">
+                <i data-lucide="award" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="flex items-baseline gap-2">
+              <span id="kpiQuizzesTaken" class="text-2xl font-black text-slate-900">0</span>
+              <span class="text-xs text-emerald-600 font-semibold">Mastery evaluations</span>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-3">Target mastery: ≥ 80% per topic</p>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between text-slate-500 mb-2">
+              <span class="text-xs font-bold uppercase tracking-wider">Mean Quiz Score</span>
+              <div class="p-2 rounded-xl bg-violet-50 text-violet-600">
+                <i data-lucide="gauge" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="flex items-baseline gap-2">
+              <span id="kpiMeanScore" class="text-2xl font-black text-slate-900">0%</span>
+              <span id="kpiScoreStatus" class="text-xs text-slate-500 font-medium">Pending test</span>
+            </div>
+            <div class="w-full bg-slate-100 rounded-full h-1.5 mt-3 overflow-hidden">
+              <div id="kpiMeanScoreBar" class="bg-violet-600 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between text-slate-500 mb-2">
+              <span class="text-xs font-bold uppercase tracking-wider">Identified Weak Areas</span>
+              <div class="p-2 rounded-xl bg-amber-50 text-amber-600">
+                <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="flex items-baseline gap-2">
+              <span id="kpiWeakCount" class="text-2xl font-black text-amber-600">0</span>
+              <span class="text-xs text-amber-700 font-semibold">&lt; 70% threshold</span>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-3">Prioritized in AI mentor sessions</p>
+          </div>
+
+        </div>
+
+        <!-- Highlighted Weak Topic Alert Banner -->
+        <div id="weakTopicAlertCard" class="bg-gradient-to-r from-amber-500/10 via-rose-500/10 to-amber-500/10 border-2 border-amber-300 rounded-2xl p-5 shadow-sm hidden">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-md">
+                <i data-lucide="target" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-extrabold uppercase tracking-wider text-amber-800 bg-amber-200/80 px-2 py-0.5 rounded-md">Priority Revision</span>
+                  <span id="weakAlertTopicSubject" class="text-xs font-bold text-slate-600">CS501</span>
+                </div>
+                <h4 id="weakAlertTopicTitle" class="text-base font-bold text-slate-900 mt-0.5">
+                  Functional Dependencies & Normalization
+                </h4>
+                <p id="weakAlertTopicScore" class="text-xs text-slate-600">
+                  Latest quiz score: <strong class="text-rose-600 font-bold">66.7%</strong> (Below the 80% mastery threshold)
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2.5 w-full sm:w-auto">
+              <button
+                onclick="askMentorAboutWeakTopic()"
+                class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shadow-md transition-all active:scale-[0.98]"
+              >
+                <i data-lucide="bot" class="w-4 h-4 text-emerald-400"></i>
+                Ask Mentor for Revision Tips
+              </button>
+              <button
+                onclick="retakeWeakTopicQuiz()"
+                class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-md transition-all active:scale-[0.98]"
+              >
+                <i data-lucide="play-circle" class="w-4 h-4"></i>
+                Retake Quiz
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Enrolled Subjects Breakdown -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-base font-bold text-slate-900">Enrolled Semester Subjects</h3>
+            <button onclick="switchView('syllabus')" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1">
+              <span>View Full Syllabus</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+          <div id="dashboardSubjectsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Dynamically populated subject progress cards -->
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- ======================================================== -->
+      <!-- VIEW 2: SYLLABUS -->
+      <!-- ======================================================== -->
+      <section id="view-syllabus" class="space-y-6 hidden">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Curriculum & Syllabus</h2>
+            <p class="text-sm text-slate-500 mt-0.5">Manage enrolled courses, track module progress, and trigger AI-generated quizzes.</p>
+          </div>
+          <button
+            onclick="openAddSubjectModal()"
+            class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-md transition-all active:scale-[0.98]"
+          >
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            Add New Subject
+          </button>
+        </div>
+
+        <!-- Subjects Container -->
+        <div id="syllabusSubjectsList" class="space-y-6">
+          <!-- Dynamically populated subjects and topics -->
+        </div>
+
+      </section>
+
+
+      <!-- ======================================================== -->
+      <!-- VIEW 3: AI QUIZ ENGINE -->
+      <!-- ======================================================== -->
+      <section id="view-quiz" class="space-y-6 hidden">
+        
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+          <div class="max-w-2xl">
+            <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">AI Mastery Quiz Generator</h2>
+            <p class="text-sm text-slate-500 mt-1">
+              Select an enrolled syllabus topic. Gemini 2.5 Flash will synthesize 3 conceptual MCQs to evaluate your comprehension. Score ≥ 80% to auto-complete the topic!
+            </p>
+          </div>
+
+          <!-- Topic Selection Bar -->
+          <div class="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <div class="flex-1">
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Select Syllabus Topic</label>
+              <select
+                id="quizTopicSelector"
+                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium"
+              >
+                <!-- Grouped topics populated via JS -->
+              </select>
+            </div>
+            <div class="sm:self-end">
+              <button
+                id="generateQuizBtn"
+                onclick="handleGenerateQuiz()"
+                type="button"
+                class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white text-sm font-bold shadow-md shadow-indigo-600/20 transition-all active:scale-[0.98]"
+              >
+                <i data-lucide="sparkles" class="w-4 h-4 text-amber-300"></i>
+                <span id="generateQuizBtnText">Generate Quiz with AI</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loading State Card -->
+        <div id="quizLoadingCard" class="bg-white border border-slate-200 rounded-2xl p-12 text-center shadow-sm hidden">
+          <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 mb-4 animate-spin">
+            <i data-lucide="loader-2" class="w-8 h-8"></i>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900">Synthesizing Conceptual Questions</h3>
+          <p class="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+            Grounded AI engine is extracting key concepts, constructing 4 distinct distractors, and formulating RFC 8259 questions...
+          </p>
+        </div>
+
+        <!-- Active Quiz Form Card -->
+        <div id="quizActiveCard" class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hidden">
+          <div class="border-b border-slate-100 pb-4 mb-6 flex items-center justify-between">
+            <div>
+              <span class="text-xs font-extrabold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md">Live Evaluation</span>
+              <h3 id="activeQuizTitle" class="text-xl font-black text-slate-900 mt-1">Mastery Check</h3>
+            </div>
+            <div class="text-xs text-slate-500 font-semibold">
+              3 Questions • Server Graded
+            </div>
+          </div>
+
+          <form id="activeQuizForm" onsubmit="handleSubmitQuiz(event)" class="space-y-6">
+            <div id="quizQuestionsContainer" class="space-y-6">
+              <!-- Rendered 3 MCQ cards with radio options -->
+            </div>
+
+            <div class="border-t border-slate-100 pt-5 flex items-center justify-end gap-3">
+              <button
+                type="submit"
+                id="submitQuizBtn"
+                class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold shadow-lg shadow-indigo-600/25 transition-all active:scale-[0.98]"
+              >
+                <span>Submit Quiz for Grading</span>
+                <i data-lucide="check" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Graded Quiz Results Card -->
+        <div id="quizResultsCard" class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm hidden">
+          <!-- Results populated dynamically -->
+        </div>
+
+      </section>
+
+
+      <!-- ======================================================== -->
+      <!-- VIEW 4: AI MENTOR -->
+      <!-- ======================================================== -->
+      <section id="view-mentor" class="h-[calc(100vh-10rem)] min-h-[550px] flex flex-col md:flex-row gap-6 hidden">
+        
+        <!-- Left Column: Live Grounding Telemetry Sidebar -->
+        <div class="w-full md:w-80 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col shrink-0">
+          <div class="flex items-center gap-2 pb-3 border-b border-slate-100">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <h3 class="text-xs font-black uppercase tracking-wider text-slate-800">Live SQLite Telemetry</h3>
+          </div>
+          
+          <p class="text-[11px] text-slate-500 mt-2 leading-relaxed">
+            Every mentor query is grounded against your real-time database state:
+          </p>
+
+          <div class="mt-4 space-y-3.5 flex-1 overflow-y-auto pr-1 text-xs">
+            
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Enrolled Courses</span>
+              <ul id="telemetryCourses" class="mt-1 space-y-1 text-slate-700 font-semibold">
+                <li>• CS501: DBMS</li>
+                <li>• CS502: Operating Systems</li>
+                <li>• CS503: Computer Networks</li>
+              </ul>
+            </div>
+
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Syllabus Progress</span>
+              <p id="telemetrySyllabusProgress" class="mt-1 font-bold text-slate-800">3 / 9 Topics (33.3%)</p>
+            </div>
+
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Identified Weak Areas (&lt; 70%)</span>
+              <div id="telemetryWeakTopics" class="mt-1 space-y-1 text-rose-700 font-semibold">
+                • Functional Dependencies & Normalization (66.7%)
+              </div>
+            </div>
+
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Mentor AI Engine Constraints</span>
+              <ul class="mt-1 space-y-1 text-slate-600 text-[11px]">
+                <li>✓ Formatted bullet points</li>
+                <li>✓ Concrete practical example</li>
+                <li>✓ Encourages 80% mastery</li>
+                <li>✓ Strict &lt; 150 words brevity</li>
+              </ul>
+            </div>
+
+          </div>
+
+          <div class="pt-3 border-t border-slate-100 text-[10px] text-slate-400 text-center">
+            Zero-dependency Grounded RAG
+          </div>
+        </div>
+
+        <!-- Right Column: Interactive Chat Window -->
+        <div class="flex-1 bg-white border border-slate-200 rounded-2xl shadow-sm flex flex-col overflow-hidden">
+          
+          <!-- Chat Header -->
+          <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-500 text-white flex items-center justify-center shadow-md">
+                <i data-lucide="bot" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h3 class="text-sm font-extrabold text-slate-900">StudySync AI Academic Mentor</h3>
+                <p class="text-[11px] text-slate-500 flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  Grounded via Gemini 2.5 Flash & Offline Telemetry
+                </p>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
+              Sem 5 Specialist
+            </span>
+          </div>
+
+          <!-- Quick Prompt Chips -->
+          <div class="px-4 py-2.5 bg-slate-50 border-b border-slate-100 flex items-center gap-2 overflow-x-auto text-xs">
+            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider shrink-0">Quick Chips:</span>
+            <button
+              onclick="sendQuickPrompt('Explain Normalization in simple terms with a practical schema example.')"
+              class="px-2.5 py-1 rounded-lg bg-white hover:bg-indigo-50 hover:text-indigo-600 border border-slate-200 text-slate-700 font-medium transition-all shrink-0"
+            >
+              💡 Explain Normalization
+            </button>
+            <button
+              onclick="sendQuickPrompt('How should I improve my weak area to reach the 80% mastery mark?')"
+              class="px-2.5 py-1 rounded-lg bg-white hover:bg-indigo-50 hover:text-indigo-600 border border-slate-200 text-slate-700 font-medium transition-all shrink-0"
+            >
+              🎯 Improve weak areas
+            </button>
+            <button
+              onclick="sendQuickPrompt('Draft a high-yield 3-day revision plan for CS501 and CS502.')"
+              class="px-2.5 py-1 rounded-lg bg-white hover:bg-indigo-50 hover:text-indigo-600 border border-slate-200 text-slate-700 font-medium transition-all shrink-0"
+            >
+              📅 3-Day study plan
+            </button>
+          </div>
+
+          <!-- Chat Messages Area -->
+          <div id="chatMessagesStream" class="flex-1 p-4 overflow-y-auto custom-scrollbar space-y-4 bg-slate-50/20">
+            <!-- Dynamically populated chat bubbles -->
+          </div>
+
+          <!-- Chat Input Area -->
+          <div class="p-3.5 border-t border-slate-200 bg-white">
+            <form onsubmit="handleSendChatMessage(event)" class="flex items-center gap-2">
+              <input
+                id="chatInputText"
+                type="text"
+                autocomplete="off"
+                placeholder="Ask your mentor anything (e.g. 'Explain 3NF vs BCNF' or 'Give me OS revision tips')..."
+                class="flex-1 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium"
+              >
+              <button
+                type="submit"
+                id="sendChatBtn"
+                class="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-600/20 transition-all active:scale-[0.98] shrink-0"
+              >
+                <i data-lucide="send" class="w-4 h-4"></i>
+              </button>
+            </form>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ======================================================== -->
+      <!-- VIEW 5: ANALYTICS -->
+      <!-- ======================================================== -->
+      <section id="view-analytics" class="space-y-6 hidden">
+        
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Performance Analytics</h2>
+            <p class="text-sm text-slate-500 mt-0.5">Comprehensive diagnostic breakdown of weak vs. strong conceptual topics.</p>
+          </div>
+          <button
+            onclick="loadAnalytics()"
+            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-xs font-bold text-slate-700 shadow-sm"
+          >
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+            Refresh Analytics
+          </button>
+        </div>
+
+        <!-- Dual Column: Weak (<70%) vs Strong (>=70%) Topics -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          
+          <!-- Weak Topics Column -->
+          <div class="bg-white border border-rose-200 rounded-2xl p-6 shadow-sm">
+            <div class="flex items-center justify-between pb-4 border-b border-rose-100">
+              <div class="flex items-center gap-2">
+                <div class="p-1.5 rounded-lg bg-rose-100 text-rose-700">
+                  <i data-lucide="alert-octagon" class="w-4 h-4"></i>
+                </div>
+                <h3 class="text-base font-bold text-slate-900">Identified Weak Areas (&lt; 70%)</h3>
+              </div>
+              <span id="analyticsWeakBadge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-800">
+                1 flagged
+              </span>
+            </div>
+            <p class="text-xs text-slate-500 mt-2">
+              Topics evaluated below the 70% threshold. Requires targeted revision and quiz re-take to achieve 80% completion:
+            </p>
+            <div id="analyticsWeakList" class="mt-4 space-y-3">
+              <!-- Dynamically populated weak cards -->
+            </div>
+          </div>
+
+          <!-- Strong Topics Column -->
+          <div class="bg-white border border-emerald-200 rounded-2xl p-6 shadow-sm">
+            <div class="flex items-center justify-between pb-4 border-b border-emerald-100">
+              <div class="flex items-center gap-2">
+                <div class="p-1.5 rounded-lg bg-emerald-100 text-emerald-700">
+                  <i data-lucide="check-check" class="w-4 h-4"></i>
+                </div>
+                <h3 class="text-base font-bold text-slate-900">Mastered Strong Areas (≥ 70%)</h3>
+              </div>
+              <span id="analyticsStrongBadge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                0 mastered
+              </span>
+            </div>
+            <p class="text-xs text-slate-500 mt-2">
+              Topics demonstrating solid conceptual understanding and mastery:
+            </p>
+            <div id="analyticsStrongList" class="mt-4 space-y-3">
+              <!-- Dynamically populated strong cards -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Subject Comparison Breakdown -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+          <h3 class="text-base font-bold text-slate-900 mb-4">Subject-Wise Completion & Score Matrix</h3>
+          <div id="analyticsSubjectMatrix" class="space-y-4">
+            <!-- Dynamically populated subject bars -->
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+
+  <!-- ======================================================== -->
+  <!-- MODALS -->
+  <!-- ======================================================== -->
+
+  <!-- Add Subject Modal -->
+  <div id="addSubjectModal" class="fixed inset-0 z-50 bg-slate-950/50 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
+        <h3 class="text-base font-bold text-slate-900">Add New Subject</h3>
+        <button onclick="closeAddSubjectModal()" class="text-slate-400 hover:text-slate-600">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <form onsubmit="handleAddSubject(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Course Code</label>
+          <input id="newSubjectCode" type="text" required placeholder="CS504" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 uppercase">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Subject Name</label>
+          <input id="newSubjectName" type="text" required placeholder="Compiler Design" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closeAddSubjectModal()" class="px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl">Cancel</button>
+          <button type="submit" class="px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md">Save Subject</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Topic Modal -->
+  <div id="addTopicModal" class="fixed inset-0 z-50 bg-slate-950/50 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
+        <h3 class="text-base font-bold text-slate-900">Add Topic to Subject</h3>
+        <button onclick="closeAddTopicModal()" class="text-slate-400 hover:text-slate-600">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <form onsubmit="handleAddTopic(event)" class="space-y-4">
+        <input type="hidden" id="newTopicSubjectId">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Module</label>
+          <input id="newTopicModule" type="text" required placeholder="Module 4" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Topic Title</label>
+          <input id="newTopicTitle" type="text" required placeholder="Syntax-Directed Translation" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closeAddTopicModal()" class="px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl">Cancel</button>
+          <button type="submit" class="px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md">Add Topic</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Floating Toast Notifications -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+
+  <!-- ======================================================== -->
+  <!-- SINGLE PAGE APPLICATION JAVASCRIPT LOGIC -->
+  <!-- ======================================================== -->
+  <script>
+    // State Variables
+    let currentStudent = null;
+    let currentSyllabus = [];
+    let currentActiveQuiz = null;
+    let currentWeakTopicForAlert = null;
+
+    // API Helper
+    async function apiCall(endpoint, method = 'GET', body = null) {
+      const token = localStorage.getItem('studysync_token');
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      const config = { method, headers };
+      if (body) {
+        config.body = JSON.stringify(body);
+      }
+
+      try {
+        const response = await fetch(endpoint, config);
+        if (response.status === 401) {
+          handleLogout();
+          showToast('Session expired. Please log in again.', 'error');
+          throw new Error('Unauthorized');
+        }
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.detail || 'An error occurred');
+        }
+        return data;
+      } catch (err) {
+        console.error(`API Error on ${endpoint}:`, err);
+        throw err;
+      }
+    }
+
+    // Toast Notification System
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-xl text-xs font-bold shadow-xl border transition-all duration-300 transform translate-y-4 opacity-0 ${
+        type === 'success'
+          ? 'bg-emerald-900 text-emerald-100 border-emerald-700'
+          : type === 'error'
+          ? 'bg-rose-900 text-rose-100 border-rose-700'
+          : 'bg-slate-900 text-slate-100 border-slate-700'
+      }`;
+      
+      const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info';
+      toast.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4 shrink-0"></i><span>${message}</span>`;
+      container.appendChild(toast);
+      lucide.createIcons();
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-4', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    // Auth Helpers
+    function fillDemoCredentials() {
+      document.getElementById('loginEmail').value = 'siddharth@studysync.edu';
+      document.getElementById('loginPassword').value = 'Password@123';
+      switchAuthTab('login');
+      showToast('Evaluator credentials filled for Siddharth!', 'success');
+    }
+
+    function switchAuthTab(tab) {
+      const loginForm = document.getElementById('loginForm');
+      const signupForm = document.getElementById('signupForm');
+      const loginBtn = document.getElementById('tabLoginBtn');
+      const signupBtn = document.getElementById('tabSignupBtn');
+
+      if (tab === 'login') {
+        loginForm.classList.remove('hidden');
+        signupForm.classList.add('hidden');
+        loginBtn.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-white text-indigo-600 shadow-sm';
+        signupBtn.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900';
+      } else {
+        loginForm.classList.add('hidden');
+        signupForm.classList.remove('hidden');
+        signupBtn.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-white text-indigo-600 shadow-sm';
+        loginBtn.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900';
+      }
+      lucide.createIcons();
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      try {
+        const data = await apiCall('/auth/login', 'POST', { email, password });
+        localStorage.setItem('studysync_token', data.access_token);
+        localStorage.setItem('studysync_student', JSON.stringify(data.student));
+        currentStudent = data.student;
+        showToast(`Welcome back, ${currentStudent.name}!`, 'success');
+        initAuthenticatedApp();
+      } catch (err) {
+        showToast(err.message || 'Login failed. Please verify credentials.', 'error');
+      }
+    }
+
+    async function handleSignup(e) {
+      e.preventDefault();
+      const name = document.getElementById('signupName').value.trim();
+      const email = document.getElementById('signupEmail').value.trim();
+      const password = document.getElementById('signupPassword').value;
+
+      try {
+        const data = await apiCall('/auth/signup', 'POST', { name, email, password });
+        localStorage.setItem('studysync_token', data.access_token);
+        localStorage.setItem('studysync_student', JSON.stringify(data.student));
+        currentStudent = data.student;
+        showToast(`Account created! Starter curriculum provisioned for ${name}.`, 'success');
+        initAuthenticatedApp();
+      } catch (err) {
+        showToast(err.message || 'Signup failed.', 'error');
+      }
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('studysync_token');
+      localStorage.removeItem('studysync_student');
+      currentStudent = null;
+      document.getElementById('appShell').classList.add('hidden');
+      document.getElementById('authView').classList.remove('hidden');
+      showToast('Logged out successfully.', 'info');
+    }
+
+    // View Routing
+    function switchView(viewName) {
+      const views = ['dashboard', 'syllabus', 'quiz', 'mentor', 'analytics'];
+      views.forEach(v => {
+        const el = document.getElementById(`view-${v}`);
+        const navEl = document.getElementById(`nav-${v}`);
+        if (v === viewName) {
+          el.classList.remove('hidden');
+          if (navEl) {
+            navEl.className = 'nav-tab flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-all bg-indigo-50 text-indigo-600';
+          }
+        } else {
+          el.classList.add('hidden');
+          if (navEl) {
+            navEl.className = 'nav-tab flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-all text-slate-600 hover:text-slate-900 hover:bg-slate-100';
+          }
+        }
+      });
+
+      if (viewName === 'dashboard') loadDashboard();
+      if (viewName === 'syllabus') loadSyllabus();
+      if (viewName === 'quiz') populateQuizTopicDropdown();
+      if (viewName === 'mentor') loadMentorChat();
+      if (viewName === 'analytics') loadAnalytics();
+      lucide.createIcons();
+    }
+
+    // Time-Aware Greeting
+    function updateTimeGreeting() {
+      const greetingEl = document.getElementById('timeAwareGreeting');
+      if (!greetingEl || !currentStudent) return;
+      const hour = new Date().getHours();
+      let timePhrase = 'Good day';
+      if (hour >= 5 && hour < 12) timePhrase = 'Good morning';
+      else if (hour >= 12 && hour < 17) timePhrase = 'Good afternoon';
+      else if (hour >= 17 && hour < 22) timePhrase = 'Good evening';
+      else timePhrase = 'Burning the midnight oil';
+      greetingEl.innerHTML = `${timePhrase}, ${currentStudent.name}! 👋`;
+    }
+
+    // Load Dashboard
+    async function loadDashboard() {
+      updateTimeGreeting();
+      try {
+        const [syllabusData, analyticsData] = await Promise.all([
+          apiCall('/syllabus'),
+          apiCall('/analytics'),
+        ]);
+
+        currentSyllabus = syllabusData;
+
+        // Populate KPIs
+        const totalTopics = syllabusData.reduce((acc, sub) => acc + sub.topics.length, 0);
+        const completedTopics = syllabusData.reduce(
+          (acc, sub) => acc + sub.topics.filter(t => t.status === 'completed').length,
+          0
+        );
+        const overallPct = totalTopics > 0 ? ((completedTopics / totalTopics) * 100).toFixed(1) : '0';
+
+        document.getElementById('kpiSyllabusPct').textContent = `${overallPct}%`;
+        document.getElementById('kpiTopicsCount').textContent = `${completedTopics} / ${totalTopics} topics`;
+        document.getElementById('kpiSyllabusBar').style.width = `${overallPct}%`;
+
+        document.getElementById('kpiQuizzesTaken').textContent = analyticsData.total_quizzes;
+        document.getElementById('kpiMeanScore').textContent = `${analyticsData.mean_score}%`;
+        document.getElementById('kpiMeanScoreBar').style.width = `${Math.min(analyticsData.mean_score, 100)}%`;
+        document.getElementById('kpiScoreStatus').textContent =
+          analyticsData.mean_score >= 80 ? 'Mastery level' : analyticsData.mean_score > 0 ? 'Needs push' : 'No tests yet';
+
+        const weakCount = analyticsData.weak_topics.length;
+        document.getElementById('kpiWeakCount').textContent = weakCount;
+
+        // Weak Topic Alert Banner
+        const alertCard = document.getElementById('weakTopicAlertCard');
+        if (weakCount > 0) {
+          const firstWeak = analyticsData.weak_topics[0];
+          currentWeakTopicForAlert = firstWeak;
+          document.getElementById('weakAlertTopicSubject').textContent = firstWeak.subject_code;
+          document.getElementById('weakAlertTopicTitle').textContent = firstWeak.topic_title;
+          document.getElementById('weakAlertTopicScore').innerHTML = `Latest quiz score: <strong class="text-rose-600 font-bold">${firstWeak.score_percentage}%</strong> (Below the 80% mastery threshold)`;
+          alertCard.classList.remove('hidden');
+        } else {
+          alertCard.classList.add('hidden');
+        }
+
+        // Enrolled Subjects Breakdown
+        const subGrid = document.getElementById('dashboardSubjectsGrid');
+        subGrid.innerHTML = syllabusData.map(sub => {
+          const compCount = sub.topics.filter(t => t.status === 'completed').length;
+          return `
+            <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:border-indigo-300 transition-all">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-extrabold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-lg border border-indigo-200">${sub.code}</span>
+                <span class="text-xs font-bold text-slate-700">${sub.completion_rate}%</span>
+              </div>
+              <h4 class="text-sm font-bold text-slate-900 leading-snug line-clamp-1">${sub.name}</h4>
+              <p class="text-xs text-slate-500 mt-1">${compCount} of ${sub.topics.length} topics completed</p>
+              <div class="w-full bg-slate-100 rounded-full h-1.5 mt-3 overflow-hidden">
+                <div class="bg-indigo-600 h-1.5 rounded-full" style="width: ${sub.completion_rate}%"></div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        lucide.createIcons();
+      } catch (err) {
+        console.error('Error loading dashboard:', err);
+      }
+    }
+
+    // Load Syllabus
+    async function loadSyllabus() {
+      try {
+        const syllabusData = await apiCall('/syllabus');
+        currentSyllabus = syllabusData;
+
+        const container = document.getElementById('syllabusSubjectsList');
+        if (syllabusData.length === 0) {
+          container.innerHTML = `
+            <div class="text-center py-12 bg-white rounded-2xl border border-dashed border-slate-300 p-6">
+              <i data-lucide="book-open" class="w-12 h-12 text-slate-300 mx-auto mb-2"></i>
+              <h4 class="text-sm font-bold text-slate-700">No subjects enrolled yet</h4>
+              <p class="text-xs text-slate-500 mt-1">Click 'Add New Subject' to begin curriculum setup.</p>
+            </div>
+          `;
+          lucide.createIcons();
+          return;
+        }
+
+        container.innerHTML = syllabusData.map(sub => `
+          <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+            <div class="p-5 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="px-2.5 py-1 rounded-md text-xs font-black bg-indigo-600 text-white">${sub.code}</span>
+                  <h3 class="text-base font-extrabold text-slate-900">${sub.name}</h3>
+                </div>
+                <p class="text-xs text-slate-500 mt-1">${sub.topics.length} Modules • Overall Progress: ${sub.completion_rate}%</p>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="w-32 bg-slate-200 rounded-full h-2 overflow-hidden hidden sm:block">
+                  <div class="bg-emerald-500 h-2 rounded-full" style="width: ${sub.completion_rate}%"></div>
+                </div>
+                <button
+                  onclick="openAddTopicModal(${sub.id})"
+                  class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 text-xs font-bold text-slate-700 shadow-sm"
+                >
+                  <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                  Add Topic
+                </button>
+              </div>
+            </div>
+
+            <!-- Topics Table -->
+            <div class="divide-y divide-slate-100">
+              ${sub.topics.map(t => {
+                const scoreBadge = t.latest_score !== null && t.latest_score !== undefined
+                  ? `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold ${
+                      t.latest_score >= 70 ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
+                    }">Score: ${t.latest_score}%</span>`
+                  : `<span class="text-[11px] text-slate-400">Not Attempted</span>`;
+
+                return `
+                  <div class="p-4 sm:px-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50/70 transition-colors">
+                    <div class="flex items-start sm:items-center gap-3 flex-1">
+                      <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200 uppercase shrink-0 mt-0.5 sm:mt-0">
+                        ${t.module_number}
+                      </span>
+                      <div>
+                        <h4 class="text-sm font-bold text-slate-900">${t.title}</h4>
+                        <div class="flex items-center gap-2 mt-0.5">
+                          ${scoreBadge}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-3 self-end sm:self-center">
+                      <!-- Live Status Select -->
+                      <select
+                        onchange="handleUpdateTopicStatus(${t.id}, this.value)"
+                        class="px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-all ${
+                          t.status === 'completed'
+                            ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                            : t.status === 'in_progress'
+                            ? 'bg-amber-50 text-amber-700 border-amber-300'
+                            : 'bg-slate-100 text-slate-600 border-slate-200'
+                        }"
+                      >
+                        <option value="not_started" ${t.status === 'not_started' ? 'selected' : ''}>Not Started</option>
+                        <option value="in_progress" ${t.status === 'in_progress' ? 'selected' : ''}>In Progress</option>
+                        <option value="completed" ${t.status === 'completed' ? 'selected' : ''}>Completed</option>
+                      </select>
+
+                      <!-- Launch Quiz Button -->
+                      <button
+                        onclick="launchQuizForTopic(${t.id})"
+                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-700 text-xs font-bold transition-all border border-indigo-200"
+                      >
+                        <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                        <span>Quiz</span>
+                      </button>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `).join('');
+
+        lucide.createIcons();
+      } catch (err) {
+        console.error('Error loading syllabus:', err);
+      }
+    }
+
+    // Update Topic Status (PATCH)
+    async function handleUpdateTopicStatus(topicId, newStatus) {
+      try {
+        await apiCall(`/syllabus/topics/${topicId}/status`, 'PATCH', { status: newStatus });
+        showToast('Topic status updated successfully.', 'success');
+        loadSyllabus();
+      } catch (err) {
+        showToast('Failed to update topic status.', 'error');
+      }
+    }
+
+    // Modal Helpers
+    function openAddSubjectModal() {
+      document.getElementById('addSubjectModal').classList.remove('hidden');
+    }
+    function closeAddSubjectModal() {
+      document.getElementById('addSubjectModal').classList.add('hidden');
+      document.getElementById('newSubjectCode').value = '';
+      document.getElementById('newSubjectName').value = '';
+    }
+    async function handleAddSubject(e) {
+      e.preventDefault();
+      const code = document.getElementById('newSubjectCode').value.trim();
+      const name = document.getElementById('newSubjectName').value.trim();
+      try {
+        await apiCall('/syllabus/subjects', 'POST', { code, name });
+        closeAddSubjectModal();
+        showToast(`Subject ${code} created successfully!`, 'success');
+        loadSyllabus();
+      } catch (err) {
+        showToast(err.message || 'Failed to create subject.', 'error');
+      }
+    }
+
+    function openAddTopicModal(subjectId) {
+      document.getElementById('newTopicSubjectId').value = subjectId;
+      document.getElementById('addTopicModal').classList.remove('hidden');
+    }
+    function closeAddTopicModal() {
+      document.getElementById('addTopicModal').classList.add('hidden');
+      document.getElementById('newTopicModule').value = '';
+      document.getElementById('newTopicTitle').value = '';
+    }
+    async function handleAddTopic(e) {
+      e.preventDefault();
+      const subjectId = document.getElementById('newTopicSubjectId').value;
+      const module_number = document.getElementById('newTopicModule').value.trim();
+      const title = document.getElementById('newTopicTitle').value.trim();
+      try {
+        await apiCall(`/syllabus/subjects/${subjectId}/topics`, 'POST', { module_number, title });
+        closeAddTopicModal();
+        showToast('Topic added to subject syllabus!', 'success');
+        loadSyllabus();
+      } catch (err) {
+        showToast(err.message || 'Failed to add topic.', 'error');
+      }
+    }
+
+    // Quiz Engine
+    async function populateQuizTopicDropdown(preselectedTopicId = null) {
+      if (currentSyllabus.length === 0) {
+        currentSyllabus = await apiCall('/syllabus');
+      }
+      const select = document.getElementById('quizTopicSelector');
+      select.innerHTML = currentSyllabus.map(sub => `
+        <optgroup label="${sub.code}: ${sub.name}">
+          ${sub.topics.map(t => `
+            <option value="${t.id}" ${preselectedTopicId == t.id ? 'selected' : ''}>
+              ${t.module_number}: ${t.title}
+            </option>
+          `).join('')}
+        </optgroup>
+      `).join('');
+    }
+
+    function launchQuizForTopic(topicId) {
+      switchView('quiz');
+      populateQuizTopicDropdown(topicId);
+      handleGenerateQuiz();
+    }
+
+    async function handleGenerateQuiz() {
+      const topicId = document.getElementById('quizTopicSelector').value;
+      if (!topicId) {
+        showToast('Please select a topic first.', 'error');
+        return;
+      }
+
+      // UI States
+      document.getElementById('quizLoadingCard').classList.remove('hidden');
+      document.getElementById('quizActiveCard').classList.add('hidden');
+      document.getElementById('quizResultsCard').classList.add('hidden');
+      const genBtn = document.getElementById('generateQuizBtn');
+      genBtn.disabled = true;
+
+      try {
+        const quizData = await apiCall(`/quiz/generate/${topicId}`, 'POST');
+        currentActiveQuiz = quizData;
+
+        // Render Active Quiz
+        document.getElementById('activeQuizTitle').textContent = quizData.title;
+        const qContainer = document.getElementById('quizQuestionsContainer');
+        qContainer.innerHTML = quizData.questions.map((q, idx) => `
+          <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3">
+            <div class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+                ${idx + 1}
+              </span>
+              <p class="text-sm font-bold text-slate-900 leading-snug">${q.question_text}</p>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
+              ${q.options.map(opt => `
+                <label class="flex items-center gap-3 p-3.5 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-indigo-400 hover:bg-indigo-50/30 transition-all font-medium text-xs text-slate-800 has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/60 has-[:checked]:ring-1 has-[:checked]:ring-indigo-600">
+                  <input type="radio" name="question_${q.id}" value="${encodeURIComponent(opt)}" required class="w-4 h-4 text-indigo-600 focus:ring-indigo-500">
+                  <span>${opt}</span>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+        `).join('');
+
+        document.getElementById('quizLoadingCard').classList.add('hidden');
+        document.getElementById('quizActiveCard').classList.remove('hidden');
+        lucide.createIcons();
+      } catch (err) {
+        document.getElementById('quizLoadingCard').classList.add('hidden');
+        showToast(err.message || 'Quiz generation failed.', 'error');
+      } finally {
+        genBtn.disabled = false;
+      }
+    }
+
+    async function handleSubmitQuiz(e) {
+      e.preventDefault();
+      if (!currentActiveQuiz) return;
+
+      const submitBtn = document.getElementById('submitQuizBtn');
+      submitBtn.disabled = true;
+
+      const answers = currentActiveQuiz.questions.map(q => {
+        const selectedRadio = document.querySelector(`input[name="question_${q.id}"]:checked`);
+        return {
+          question_id: q.id,
+          selected_answer: selectedRadio ? decodeURIComponent(selectedRadio.value) : '',
+        };
+      });
+
+      try {
+        const gradedData = await apiCall('/quiz/submit', 'POST', {
+          quiz_id: currentActiveQuiz.id,
+          answers: answers,
+        });
+
+        // Hide active quiz and show results
+        document.getElementById('quizActiveCard').classList.add('hidden');
+        const resultsCard = document.getElementById('quizResultsCard');
+        resultsCard.classList.remove('hidden');
+
+        const passed = gradedData.passed; // >= 80%
+
+        resultsCard.innerHTML = `
+          <div class="text-center max-w-lg mx-auto">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-3xl ${
+              passed ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600'
+            } mb-3 shadow-lg">
+              <i data-lucide="${passed ? 'trophy' : 'alert-triangle'}" class="w-8 h-8"></i>
+            </div>
+            <h3 class="text-2xl font-black text-slate-900">
+              ${passed ? '🎉 80%+ Mastery Achieved!' : '⚠️ Below 80% Mastery Threshold'}
+            </h3>
+            <p class="text-xs ${passed ? 'text-emerald-700' : 'text-amber-700'} mt-1 font-semibold">
+              ${
+                passed
+                  ? 'Congratulations! Topic status has been automatically updated to COMPLETED on your syllabus.'
+                  : 'Topic set to IN PROGRESS. Review the conceptual feedback below and retake to achieve mastery completion.'
+              }
+            </p>
+            
+            <div class="my-5 p-4 bg-slate-50 border border-slate-200 rounded-2xl inline-flex items-center gap-6">
+              <div>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Raw Score</p>
+                <p class="text-xl font-black text-slate-900">${gradedData.score_raw} / ${gradedData.total_questions}</p>
+              </div>
+              <div class="w-px h-8 bg-slate-200"></div>
+              <div>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Percentage</p>
+                <p class="text-xl font-black ${passed ? 'text-emerald-600' : 'text-amber-600'}">${gradedData.score_percentage}%</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Question-by-Question Diagnostic Review -->
+          <div class="mt-8 space-y-4">
+            <h4 class="text-xs font-black uppercase tracking-wider text-slate-400">Diagnostic Question Breakdown</h4>
+            ${gradedData.question_results.map((res, i) => `
+              <div class="p-5 rounded-2xl border ${
+                res.is_correct ? 'bg-emerald-50/40 border-emerald-200' : 'bg-rose-50/40 border-rose-200'
+              }">
+                <div class="flex items-start justify-between gap-3">
+                  <div class="flex items-start gap-2.5">
+                    <span class="w-5 h-5 rounded-full ${
+                      res.is_correct ? 'bg-emerald-600' : 'bg-rose-600'
+                    } text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">
+                      ${i + 1}
+                    </span>
+                    <p class="text-sm font-bold text-slate-900">${res.question_text}</p>
+                  </div>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold shrink-0 ${
+                    res.is_correct ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
+                  }">
+                    ${res.is_correct ? 'Correct' : 'Incorrect'}
+                  </span>
+                </div>
+
+                <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                  <div class="p-2.5 rounded-xl bg-white border border-slate-200">
+                    <span class="text-[10px] font-bold text-slate-400 block uppercase">Your Selection</span>
+                    <span class="${res.is_correct ? 'text-emerald-700 font-bold' : 'text-rose-700 font-bold'}">${res.selected_answer}</span>
+                  </div>
+                  <div class="p-2.5 rounded-xl bg-white border border-slate-200">
+                    <span class="text-[10px] font-bold text-slate-400 block uppercase">Correct Answer</span>
+                    <span class="text-emerald-700 font-bold">${res.correct_answer}</span>
+                  </div>
+                </div>
+
+                <div class="mt-3 p-3 bg-white/80 rounded-xl border border-slate-200/80 text-xs text-slate-700">
+                  <span class="font-bold text-indigo-700">💡 Explanation:</span> ${res.explanation}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <button
+              onclick="handleGenerateQuiz()"
+              class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-md transition-all"
+            >
+              Retake Quiz
+            </button>
+            <button
+              onclick="askMentorAboutCurrentQuiz()"
+              class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shadow-md transition-all"
+            >
+              Ask AI Mentor for Help on This Topic
+            </button>
+            <button
+              onclick="switchView('syllabus')"
+              class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all"
+            >
+              Return to Syllabus
+            </button>
+          </div>
+        `;
+
+        lucide.createIcons();
+      } catch (err) {
+        showToast(err.message || 'Submission failed.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+      }
+    }
+
+    // AI Mentor Chat
+    async function loadMentorChat() {
+      try {
+        const history = await apiCall('/mentor/history');
+        const stream = document.getElementById('chatMessagesStream');
+
+        if (history.length === 0) {
+          stream.innerHTML = `
+            <div class="text-center py-10 text-slate-400">
+              <i data-lucide="bot" class="w-10 h-10 mx-auto mb-2 opacity-50"></i>
+              <p class="text-xs">Your AI Mentor is online and grounded on your live telemetry.</p>
+            </div>
+          `;
+        } else {
+          stream.innerHTML = history.map(msg => renderChatBubble(msg.sender, msg.content)).join('');
+          stream.scrollTop = stream.scrollHeight;
+        }
+        lucide.createIcons();
+      } catch (err) {
+        console.error('Error loading mentor history:', err);
+      }
+    }
+
+    function renderChatBubble(sender, text) {
+      const isStudent = sender === 'student' || sender === 'user';
+      // Basic formatting for bullet points and bolding
+      const formattedText = text
+        .replace(/\n/g, '<br>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/`([^`]+)`/g, '<code class="bg-slate-100 px-1 py-0.5 rounded text-indigo-700 font-mono text-[11px]">$1</code>');
+
+      if (isStudent) {
+        return `
+          <div class="flex items-start justify-end gap-2.5">
+            <div class="max-w-md bg-indigo-600 text-white p-3.5 rounded-2xl rounded-tr-none text-xs leading-relaxed shadow-sm">
+              ${formattedText}
+            </div>
+            <div class="w-7 h-7 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs font-bold shrink-0">
+              <i data-lucide="user" class="w-4 h-4"></i>
+            </div>
+          </div>
+        `;
+      } else {
+        return `
+          <div class="flex items-start gap-2.5">
+            <div class="w-7 h-7 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-500 text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5 shadow-sm">
+              <i data-lucide="bot" class="w-4 h-4"></i>
+            </div>
+            <div class="max-w-md bg-white border border-slate-200 text-slate-800 p-4 rounded-2xl rounded-tl-none text-xs leading-relaxed shadow-sm">
+              ${formattedText}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    async function handleSendChatMessage(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById('chatInputText');
+      const message = input.value.trim();
+      if (!message) return;
+
+      input.value = '';
+      const stream = document.getElementById('chatMessagesStream');
+
+      // Append student bubble immediately
+      stream.innerHTML += renderChatBubble('student', message);
+      
+      // Append temporary typing indicator
+      const typingId = `typing_${Date.now()}`;
+      stream.innerHTML += `
+        <div id="${typingId}" class="flex items-center gap-2 text-slate-400 text-xs py-2 pl-9">
+          <i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i>
+          <span>Mentor is formulating advice with live telemetry...</span>
+        </div>
+      `;
+      stream.scrollTop = stream.scrollHeight;
+      lucide.createIcons();
+
+      try {
+        const data = await apiCall('/mentor/chat', 'POST', { message });
+        document.getElementById(typingId)?.remove();
+
+        // Append mentor reply
+        stream.innerHTML += renderChatBubble('mentor', data.reply);
+        stream.scrollTop = stream.scrollHeight;
+
+        // Update telemetry sidebar with newly returned telemetry
+        if (data.telemetry) {
+          document.getElementById('telemetrySyllabusProgress').textContent =
+            `${data.telemetry.completed_topics_count} / ${data.telemetry.total_topics_count} Topics (${data.telemetry.syllabus_completion_pct}%)`;
+          
+          const weakContainer = document.getElementById('telemetryWeakTopics');
+          if (data.telemetry.weak_topics.length > 0) {
+            weakContainer.innerHTML = data.telemetry.weak_topics.map(t => `• ${t}`).join('<br>');
+          } else {
+            weakContainer.textContent = 'None flagged yet (All ≥ 70%)';
+          }
+        }
+        lucide.createIcons();
+      } catch (err) {
+        document.getElementById(typingId)?.remove();
+        showToast('Error communicating with AI Mentor.', 'error');
+      }
+    }
+
+    function sendQuickPrompt(promptText) {
+      document.getElementById('chatInputText').value = promptText;
+      handleSendChatMessage();
+    }
+
+    function askMentorAboutWeakTopic() {
+      switchView('mentor');
+      const topicTitle = currentWeakTopicForAlert ? currentWeakTopicForAlert.topic_title : 'Functional Dependencies & Normalization';
+      sendQuickPrompt(`I scored low on ${topicTitle}. Please give me a high-yield revision checklist and concrete examples so I can hit the 80% mastery mark.`);
+    }
+
+    function askMentorAboutCurrentQuiz() {
+      switchView('mentor');
+      const topicTitle = currentActiveQuiz ? currentActiveQuiz.title : 'this quiz';
+      sendQuickPrompt(`I just took a quiz on ${topicTitle}. Can you explain the core concepts behind the questions I struggled with?`);
+    }
+
+    function retakeWeakTopicQuiz() {
+      if (currentWeakTopicForAlert) {
+        launchQuizForTopic(currentWeakTopicForAlert.topic_id);
+      } else {
+        switchView('quiz');
+      }
+    }
+
+    // Load Analytics View
+    async function loadAnalytics() {
+      try {
+        const data = await apiCall('/analytics');
+
+        // Weak Topics List (< 70%)
+        const weakList = document.getElementById('analyticsWeakList');
+        document.getElementById('analyticsWeakBadge').textContent = `${data.weak_topics.length} flagged`;
+        if (data.weak_topics.length === 0) {
+          weakList.innerHTML = `
+            <div class="text-center py-6 text-slate-400 text-xs">
+              <i data-lucide="smile" class="w-8 h-8 text-emerald-400 mx-auto mb-1"></i>
+              No weak areas identified! All tested topics are ≥ 70%.
+            </div>
+          `;
+        } else {
+          weakList.innerHTML = data.weak_topics.map(t => `
+            <div class="p-4 rounded-xl border border-rose-200 bg-rose-50/50 flex items-center justify-between gap-3">
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[10px] font-black uppercase text-rose-700 bg-rose-100 px-1.5 py-0.5 rounded">${t.subject_code}</span>
+                  <span class="text-xs font-bold text-slate-800">${t.topic_title}</span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-0.5">Current Mastery: <strong class="text-rose-600">${t.score_percentage}%</strong> (Below 80% mark)</p>
+              </div>
+              <button
+                onclick="launchQuizForTopic(${t.topic_id})"
+                class="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-[11px] font-bold shadow-sm shrink-0"
+              >
+                Retake Quiz
+              </button>
+            </div>
+          `).join('');
+        }
+
+        // Strong Topics List (>= 70%)
+        const strongList = document.getElementById('analyticsStrongList');
+        document.getElementById('analyticsStrongBadge').textContent = `${data.strong_topics.length} mastered`;
+        if (data.strong_topics.length === 0) {
+          strongList.innerHTML = `
+            <div class="text-center py-6 text-slate-400 text-xs">
+              Take module quizzes to record verified mastery topics!
+            </div>
+          `;
+        } else {
+          strongList.innerHTML = data.strong_topics.map(t => `
+            <div class="p-4 rounded-xl border border-emerald-200 bg-emerald-50/50 flex items-center justify-between gap-3">
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[10px] font-black uppercase text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded">${t.subject_code}</span>
+                  <span class="text-xs font-bold text-slate-800">${t.topic_title}</span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-0.5">Mastery Score: <strong class="text-emerald-600">${t.score_percentage}%</strong></p>
+              </div>
+              <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                Mastered
+              </span>
+            </div>
+          `).join('');
+        }
+
+        // Subject Matrix
+        const matrix = document.getElementById('analyticsSubjectMatrix');
+        matrix.innerHTML = data.subjects.map(s => `
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <div class="flex items-center justify-between text-xs mb-2">
+              <span class="font-bold text-slate-900">${s.code}: ${s.name}</span>
+              <span class="font-semibold text-slate-600">${s.completed_topics}/${s.total_topics} topics (${s.completion_pct}%)</span>
+            </div>
+            <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden mb-2">
+              <div class="bg-indigo-600 h-2 rounded-full" style="width: ${s.completion_pct}%"></div>
+            </div>
+            <div class="flex items-center justify-between text-[11px] text-slate-500">
+              <span>Mean Quiz Score: <strong class="text-slate-800">${s.mean_quiz_score !== null ? s.mean_quiz_score + '%' : 'N/A'}</strong></span>
+              <span>Completion Target: 100%</span>
+            </div>
+          </div>
+        `).join('');
+
+        lucide.createIcons();
+      } catch (err) {
+        console.error('Error loading analytics:', err);
+      }
+    }
+
+    // App Initialization
+    function initAuthenticatedApp() {
+      const studentJson = localStorage.getItem('studysync_student');
+      if (studentJson) {
+        currentStudent = JSON.parse(studentJson);
+        document.getElementById('userNameDisplay').textContent = currentStudent.name;
+        document.getElementById('userInitial').textContent = currentStudent.name.charAt(0).toUpperCase();
+      }
+      document.getElementById('authView').classList.add('hidden');
+      document.getElementById('appShell').classList.remove('hidden');
+      switchView('dashboard');
+      lucide.createIcons();
+    }
+
+    // Auto-login check on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem('studysync_token');
+      if (token) {
+        initAuthenticatedApp();
+      } else {
+        lucide.createIcons();
+      }
+    });
+  </script>
+</body>
+</html>
